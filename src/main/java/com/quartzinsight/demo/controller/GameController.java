@@ -1,58 +1,63 @@
 package com.quartzinsight.demo.controller;
 
+import com.quartzinsight.demo.converter.Converter;
+import com.quartzinsight.demo.dto.GameDto;
 import com.quartzinsight.demo.model.Game;
 import com.quartzinsight.demo.service.GameService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @RestController
 public class GameController {
 
-    @Autowired
-    GameService service;
+  @Autowired
+  GameService service;
 
-    @GetMapping("/api/store/games")
-    public ResponseEntity <List<Game>> getGames(){
+  @Autowired
+  Converter converter;
 
-        List<Game> games =  service.findAllByAvailable(1);
-        return new ResponseEntity<>(games, HttpStatus.OK);
-    }
+  @GetMapping("/api/store/games")
+  public ResponseEntity <List<GameDto>> getGames(){
 
-    @GetMapping("/api/store/games/{id}")
-    public ResponseEntity<Optional<Game>> getGameById(@PathVariable Long id){
+    List<GameDto> games =  service.findAllByAvailable();
+    log.info("Request : findAll  games ");
+    return new ResponseEntity<>(games, HttpStatus.OK);
+  }
 
-        Optional <Game> game =  service.findByIdAndAvailable(id);
-        return new ResponseEntity<>(game,HttpStatus.OK);
+  @GetMapping("/api/store/games/{id}")
+  public ResponseEntity<GameDto> getGameById(@PathVariable Long id){
 
-    }
+    GameDto gameDto  =  service.findByIdAndAvailable(id);
+    return new ResponseEntity<>(gameDto,HttpStatus.OK);
+
+  }
 
 
-    @PostMapping(value = "/api/store/games")
-    public ResponseEntity<Void> ajouterProduit(@RequestBody Game game) {
-        Game save = service.save(game);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+  @PostMapping(value = "/api/store/games")
+  public ResponseEntity<Void> addGame(@RequestBody GameDto gameDto) {
+    service.save(gameDto);
+    return new ResponseEntity<>(HttpStatus.CREATED);
+  }
 
-    @DeleteMapping("/api/store/games/{gameId}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long gameId){
-        Optional<Game> game = service.findByIdAndAvailable(gameId);
-        if(game.isPresent()){
-            game.get().setAvailable(0);
-            service.save(game.get());
-        }
-        return new ResponseEntity(HttpStatus.OK);
+  @DeleteMapping("/api/store/games/{gameId}")
+  public ResponseEntity<Void> deleteById(@PathVariable Long gameId){
+    service.deleteById(gameId);
+    return new ResponseEntity(HttpStatus.OK);
 
-    }
+  }
 
-    @GetMapping("/api/users/{userId}/games")
-    public ResponseEntity<List<Game>> getGameByUserId(@PathVariable Long userId){
-        List<Game> games =  service.findByUsers_Id(userId);
-        return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
-    }
+  @GetMapping("/api/users/{userId}/games")
+  public ResponseEntity<List<GameDto>> getGameByUserId(@PathVariable Long userId){
+    List<GameDto> games =  service.findByUsers_Id(userId);
+    return new ResponseEntity<>(games,HttpStatus.OK);
+  }
+
+
 
 }
