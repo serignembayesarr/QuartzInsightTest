@@ -57,16 +57,19 @@ public class UserController {
     }
 
     @PostMapping(value = "/api/users/{userId}/friends")
-    public ResponseEntity<Void>  addFriendToUser(@PathVariable Long userId, @RequestBody UserDto friendDto) {
+    public ResponseEntity addFriendToUser(@PathVariable Long userId, @RequestBody UserDto friendDto) {
 
         UserDto userDto = userService.findById(userId);
-        friendDto = userService.findById(friendDto.getId());
-        userDto.getFriendsId().add(friendDto.getId());
-        friendDto.getFriendsId().add(userId);
-        userService.save(userDto);
-        userService.save(friendDto);
+        UserDto friendToadd = userService.findById(friendDto.getId());
+        if(friendDto.hashCode() == friendToadd.hashCode() && friendDto.equals(friendToadd)){
+            userDto.getFriendsId().add(friendDto.getId());
+            friendDto.getFriendsId().add(userId);
+            userService.save(userDto);
+            userService.save(friendDto);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong information about friend");
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/api/users/{userId}/games/{gameId}")
