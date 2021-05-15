@@ -22,7 +22,8 @@ public class UserController {
     UserService userService;
     @Autowired
     Converter converter;
-
+    @Autowired
+    GameService gameService;
 
     @GetMapping("/api/users")
     private ResponseEntity<List<UserDto>> getUsers(){
@@ -46,15 +47,19 @@ public class UserController {
 
 
     @PostMapping(value = "/api/users/{userId}/games")
-    public ResponseEntity<Void> addGameToUser(@PathVariable Long userId, @RequestBody GameDto gameDto) {
+    public ResponseEntity addGameToUser(@PathVariable Long userId, @RequestBody GameDto gameDto) {
 
         UserDto userDto = userService.findById(userId);
-        userDto.getGameIds().add(gameDto.getId().intValue());
-        userService.save(userDto);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        GameDto gameToAdd = gameService.findByIdAndAvailable(gameDto.getId());
+        if(gameDto.hashCode() == gameToAdd.hashCode() && gameDto.equals(gameToAdd)){
+            userDto.getGameIds().add(gameDto.getId().intValue());
+            userService.save(userDto);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong information about game");
 
     }
+
 
     @PostMapping(value = "/api/users/{userId}/friends")
     public ResponseEntity addFriendToUser(@PathVariable Long userId, @RequestBody UserDto friendDto) {

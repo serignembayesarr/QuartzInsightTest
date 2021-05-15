@@ -42,7 +42,7 @@ public class UserDto {
             return false;
         }
         final UserDto other = (UserDto) obj;
-        if (this.username != other.username) {
+        if (! (this.username).equals( other.username)) {
             return false;
         }
 
