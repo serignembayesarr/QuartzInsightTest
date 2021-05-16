@@ -46,7 +46,7 @@ public class DemoApplication implements CommandLineRunner {
 
 
 		Game game1 = new Game().builder()
-				.title("NBA")
+				.title("FIFA")
 				.url("www.fifa.com")
 				.available(1)
 				.build();
