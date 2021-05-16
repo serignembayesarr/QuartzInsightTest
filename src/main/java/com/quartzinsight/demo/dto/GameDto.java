@@ -37,7 +37,7 @@ public class GameDto {
             return false;
         }
         final GameDto other = (GameDto) obj;
-        if (this.title != other.title) {
+        if (! (this.title).equals( other.title)) {
             return false;
         }
 
