@@ -52,8 +52,8 @@ public class DemoApplication implements CommandLineRunner {
 				.build();
 
 
-		gameRepository.save(game);
-		gameRepository.save(game1);
+		//gameRepository.save(game);
+		//gameRepository.save(game1);
 
 
 		User user = new User().builder()
@@ -68,9 +68,12 @@ public class DemoApplication implements CommandLineRunner {
 
 
 
-		gameRepository.save(game);
-		userRepository.save(user1);
-		userRepository.save(user);
+		//gameRepository.save(game);
+		//userRepository.save(user1);
+		//userRepository.save(user);
+
+
+
 		//user1.getFriends().add(user);
 		//myUserRepository.save(user1);
 
