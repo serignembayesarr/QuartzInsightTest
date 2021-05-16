@@ -26,7 +26,7 @@ public class UserController {
     GameService gameService;
 
     @GetMapping("/api/users")
-    private ResponseEntity<List<UserDto>> getUsers(){
+    public ResponseEntity<List<UserDto>> getUsers(){
 
         List<UserDto> users =  userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class UserController {
         if(gameDto.hashCode() == gameToAdd.hashCode() && gameDto.equals(gameToAdd)){
             userDto.getGameIds().add(gameDto.getId().intValue());
             userService.save(userDto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong information about game");
 
@@ -71,7 +71,7 @@ public class UserController {
             friendDto.getFriendsId().add(userId);
             userService.save(userDto);
             userService.save(friendDto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong information about friend");
 
