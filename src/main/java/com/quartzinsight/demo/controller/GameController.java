@@ -2,8 +2,10 @@ package com.quartzinsight.demo.controller;
 
 import com.quartzinsight.demo.converter.Converter;
 import com.quartzinsight.demo.dto.GameDto;
+import com.quartzinsight.demo.dto.UserDto;
 import com.quartzinsight.demo.model.Game;
 import com.quartzinsight.demo.service.GameService;
+import com.quartzinsight.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,9 @@ public class GameController {
 
   @Autowired
   Converter converter;
+
+  @Autowired
+  UserService userService;
 
   @GetMapping("/api/store/games")
   public ResponseEntity <List<GameDto>> getGames(){
@@ -54,6 +59,7 @@ public class GameController {
 
   @GetMapping("/api/users/{userId}/games")
   public ResponseEntity<List<GameDto>> getGameByUserId(@PathVariable Long userId){
+    UserDto userDto = userService.findById(userId);
     List<GameDto> games =  service.findByUsers_Id(userId);
     return new ResponseEntity<>(games,HttpStatus.OK);
   }

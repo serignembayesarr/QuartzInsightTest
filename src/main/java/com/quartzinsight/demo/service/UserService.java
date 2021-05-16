@@ -27,10 +27,10 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void save(UserDto userDto){
+    public User save(UserDto userDto){
 
         User user = converter.convertToUserEntity(userDto);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public UserDto findById (Long id){
