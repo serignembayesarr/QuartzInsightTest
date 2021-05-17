@@ -38,6 +38,8 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run (String... arg0) throws Exception {
+
+
 		Game game = new Game().builder()
 				.title("NBA")
 				.url("www.nba.com")
@@ -52,8 +54,8 @@ public class DemoApplication implements CommandLineRunner {
 				.build();
 
 
-		//gameRepository.save(game);
-		//gameRepository.save(game1);
+	//	gameRepository.save(game);
+	//	gameRepository.save(game1);
 
 
 		User user = new User().builder()
